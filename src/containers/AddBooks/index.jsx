@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { addBook } from "../../redux/actions/actionAddBooks";
+import { addBook, deleteBook } from "../../redux/actions/actionAddBooks";
 import FlipMove from "react-flip-move";
 
-const AddBooks = ({ libraryData, addBook }) => {
+const AddBooks = ({ libraryData, addBook, deleteBook }) => {
 	console.log(libraryData);
 
 	const initialState = {
@@ -37,7 +37,12 @@ const AddBooks = ({ libraryData, addBook }) => {
 							<span>
 								<strong>Auteur: </strong> {data.author}
 							</span>
-							<button className="btn btn-danger">🗑</button>
+							<button
+								className="btn btn-danger"
+								onClick={() => deleteBook(data.id)}
+							>
+								🗑
+							</button>
 						</li>
 					);
 				})}
@@ -117,6 +122,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		addBook: (param) => dispatch(addBook(param)),
+		deleteBook: (id) => dispatch(deleteBook(id)),
 	};
 };
 

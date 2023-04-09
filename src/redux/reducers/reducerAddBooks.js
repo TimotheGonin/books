@@ -1,4 +1,4 @@
-import { ADD_BOOKS } from "../constants";
+import { ADD_BOOKS, DELETE_BOOKS } from "../constants";
 import { v4 as uuidv4 } from "uuid";
 
 const initialState = {
@@ -13,6 +13,11 @@ const helperAddData = (action) => {
 	};
 };
 
+const removeDataById = (state, id) => {
+	const books = state.filter((book) => book.id !== id);
+	return books;
+};
+
 //reducer
 
 const reducerAddBooks = (state = initialState.books, action) => {
@@ -23,6 +28,11 @@ const reducerAddBooks = (state = initialState.books, action) => {
 	switch (action.type) {
 		case ADD_BOOKS:
 			state = [...state, helperAddData(action)];
+			localStorage.setItem("booksData", JSON.stringify(state));
+			return state;
+
+		case DELETE_BOOKS:
+			state = removeDataById(state, action.payload);
 			localStorage.setItem("booksData", JSON.stringify(state));
 			return state;
 
