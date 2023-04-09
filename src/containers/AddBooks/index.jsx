@@ -105,7 +105,7 @@ const AddBooks = ({ libraryData, addBook, deleteBook, deleteAll }) => {
 					</form>
 				</div>
 			</div>
-			<div className="Container" style={{ minHeight: "200px" }}>
+			<div className="container" style={{ minHeight: "200px" }}>
 				<div className="row">
 					<div className="col-md-12">
 						<ul className="list-group">{displayData}</ul>
