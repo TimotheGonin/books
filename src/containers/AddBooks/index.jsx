@@ -1,8 +1,13 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { addBook } from "../../redux/actions/actionAddBooks";
+import {
+	addBook,
+	deleteBook,
+	deleteAllBooks,
+} from "../../redux/actions/actionAddBooks";
+import FlipMove from "react-flip-move";
 
-const AddBooks = ({ libraryData, addBook }) => {
+const AddBooks = ({ libraryData, addBook, deleteBook, deleteAll }) => {
 	console.log(libraryData);
 
 	const initialState = {
@@ -20,6 +25,43 @@ const AddBooks = ({ libraryData, addBook }) => {
 		//vider input
 		setNewData(initialState);
 	};
+
+	const displayData =
+		libraryData.length > 0 ? (
+			<FlipMove>
+				{libraryData.map((data) => {
+					return (
+						<li
+							key={data.id}
+							className="list-group-item list-group-item-light d-flex justify-content-between"
+						>
+							<span>
+								<strong>Titre: </strong> {data.title}
+							</span>
+							<span>
+								<strong>Auteur: </strong> {data.author}
+							</span>
+							<button
+								className="btn btn-danger"
+								onClick={() => deleteBook(data.id)}
+							>
+								🗑
+							</button>
+						</li>
+					);
+				})}
+			</FlipMove>
+		) : (
+			<p className="text-center">Aucune data à afficher</p>
+		);
+
+	const deleteAllBooksBtn = libraryData.length > 0 && (
+		<div className="d-flex justify-content-center">
+			<button className="btn btn-danger mt-4 mb-5" onClick={() => deleteAll()}>
+				Effacer tous les livres
+			</button>
+		</div>
+	);
 
 	return (
 		<main role="main">
@@ -66,16 +108,8 @@ const AddBooks = ({ libraryData, addBook }) => {
 			<div className="Container" style={{ minHeight: "200px" }}>
 				<div className="row">
 					<div className="col-md-12">
-						<ul className="list-group">
-							<li className="list-group-item list-group-item-light d-flex justify-content-between">
-								livres enregistrés ici
-							</li>
-						</ul>
-						<div className="d-flex justify-content-center">
-							<button className="btn btn-danger mt-4 mb-5">
-								Effacer tous les livres
-							</button>
-						</div>
+						<ul className="list-group">{displayData}</ul>
+						{deleteAllBooksBtn}
 					</div>
 				</div>
 			</div>
@@ -92,6 +126,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		addBook: (param) => dispatch(addBook(param)),
+		deleteBook: (id) => dispatch(deleteBook(id)),
+		deleteAll: () => dispatch(deleteAllBooks()),
 	};
 };
 
