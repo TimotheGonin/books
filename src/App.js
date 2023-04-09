@@ -1,14 +1,19 @@
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import AddBooks from "./containers/AddBooks";
+import SearchBooks from "./containers/SearchBooks";
 import Footer from "./components/Footer";
 
 function App() {
 	return (
-		<div className="App">
+		<Router className="App">
 			<NavBar />
-			<AddBooks />
+			<Routes>
+				<Route exact path="/" element={<AddBooks />} />
+				<Route path="/search" element={<SearchBooks />} />
+			</Routes>
 			<Footer />
-		</div>
+		</Router>
 	);
 }
 
