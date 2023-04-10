@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchBooks } from "../../redux/actions/actionFetchBooks";
+import { addBook } from "../../redux/actions/actionAddBooks";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const SearchBooks = () => {
 	const [title, setTitle] = useState("");
@@ -14,6 +17,15 @@ const SearchBooks = () => {
 		console.log(title);
 		dispatch(fetchBooks(title));
 		setTitle("");
+	};
+
+	const handleSave = (title, author) => {
+		const bookToSave = {
+			title,
+			author,
+		};
+		dispatch(addBook(bookToSave));
+		toast.success("Livre enregistré !");
 	};
 
 	const dipslayFetchedBooks = state.isLoading ? (
@@ -62,7 +74,12 @@ const SearchBooks = () => {
 							>
 								Plus d'infos
 							</a>
-							<button className="btn btn-outline-secondary ml-3">
+							<button
+								className="btn btn-outline-secondary ml-3"
+								onClick={() =>
+									handleSave(data.volumeInfo.title, data.volumeInfo.authors)
+								}
+							>
 								Enregistrer
 							</button>
 						</div>
@@ -104,6 +121,17 @@ const SearchBooks = () => {
 			<div className="container" style={{ minHeight: "200px" }}>
 				<div id="accordion">{dipslayFetchedBooks}</div>
 			</div>
+			<ToastContainer
+				position="bottom-right"
+				autoClose={2000}
+				hideProgressBar={true}
+				newestOnTop={false}
+				closeOnClick
+				rtl={false}
+				pauseOnFocusLoss
+				draggable
+				pauseOnHover
+			/>
 		</main>
 	);
 };
