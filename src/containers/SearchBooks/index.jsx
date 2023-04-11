@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const SearchBooks = () => {
 	const [title, setTitle] = useState("");
+	const [clickedIds, setClickedIds] = useState([]);
 	const state = useSelector((state) => state.search);
 	const dispatch = useDispatch();
 
@@ -19,13 +20,18 @@ const SearchBooks = () => {
 		setTitle("");
 	};
 
-	const handleSave = (title, author) => {
+	const handleSave = (id, title, author) => {
 		const bookToSave = {
 			title,
 			author,
 		};
 		dispatch(addBook(bookToSave));
 		toast.success("Livre enregistré !");
+		setClickedIds([...clickedIds, id]);
+	};
+
+	const handleIsDesabled = (id) => {
+		return clickedIds.includes(id);
 	};
 
 	const dipslayFetchedBooks = state.isLoading ? (
@@ -74,14 +80,20 @@ const SearchBooks = () => {
 							>
 								Plus d'infos
 							</a>
-							<button
-								className="btn btn-outline-secondary ml-3"
-								onClick={() =>
-									handleSave(data.volumeInfo.title, data.volumeInfo.authors)
-								}
-							>
-								Enregistrer
-							</button>
+							{!handleIsDesabled(data.id) && (
+								<button
+									className="btn btn-outline-info ml-3"
+									onClick={() =>
+										handleSave(
+											data.id,
+											data.volumeInfo.title,
+											data.volumeInfo.authors
+										)
+									}
+								>
+									Enregistrer
+								</button>
+							)}
 						</div>
 					</div>
 				</div>
